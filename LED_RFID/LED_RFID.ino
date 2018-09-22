@@ -22,6 +22,8 @@
 
 
 byte ssPins[] = {SS_1_PIN, SS_2_PIN, SS_3_PIN, SS_4_PIN};
+byte v;
+
 
 // Create an MFRC522 instance :
 
@@ -30,21 +32,21 @@ MFRC522 mfrc522[NR_OF_READERS];
 
 //LEDs Pin Numbers 
 
-int LED0red= 3;
-int LED0green = 2;
+int LED0green= 3;
+int LED0blue = 2;
 
-int LED1red= A4;
-int LED1green = 4;
+int LED1green= A4;
+int LED1blue = 4;
 
-int LED2red= A3;
-int LED2green = A2;
+int LED2green= A2;
+int LED2blue = A3;
 
-int LED3red= A0;
-int LED3green = A1;
+int LED3green= A0;
+int LED3blue = A1;
 
 
-int red = 255;
-int green = 255;
+int green = 0;
+int blue = 255;
 
 /**
 
@@ -56,14 +58,14 @@ void setup() {
 
   Serial.begin(9600);           // Initialize serial communications with the PC
 
-  pinMode(LED0red, OUTPUT);     // Initialize LEDs OUTPUTs
-  pinMode(LED0green, OUTPUT);
-  pinMode(LED1red, OUTPUT);
+  pinMode(LED0green, OUTPUT);     // Initialize LEDs OUTPUTs
+  pinMode(LED0blue, OUTPUT);
   pinMode(LED1green, OUTPUT);
-  pinMode(LED2red, OUTPUT);
+  pinMode(LED1blue, OUTPUT);
   pinMode(LED2green, OUTPUT);
-  pinMode(LED3red, OUTPUT);
+  pinMode(LED2blue, OUTPUT);
   pinMode(LED3green, OUTPUT);
+  pinMode(LED3blue, OUTPUT);
 
   
   while (!Serial);              // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
@@ -80,11 +82,40 @@ void setup() {
     Serial.print(F("Position "));
     Serial.print(reader);
     Serial.print(F(": "));
-    mfrc522[reader].PCD_DumpVersionToSerial();
-    
+    v = mfrc522[reader].PCD_DumpVersionToSerial();
+    Serial.println(v);
+    if ((v == 0x80)|| (v == 0x81)|| (v == 0x82) || (v == 0x88) || (v == 0x90)|| (v == 0x91)|| (v == 0x92)){
+      switch(reader){
+              case 0:
+                setColor(green, blue, LED0green, LED0blue); 
+                delay(500);
+              break;
+            
+              case 1:
+                setColor(green, blue, LED1green, LED1blue); 
+                delay(500);
+              break;
+              
+              case 2:
+                setColor(green, blue, LED2green, LED2blue); 
+                delay(500);
+              break;
+              
+              case 3:
+                setColor(green, blue, LED3green, LED3blue); 
+                delay(500);
+              break;
+              
+              default:
+              stopp();
+              break;
+            }
+    }
     delay(100);
-
-  }
+   }
+   stopp();
+   green = 255;
+   blue = 0;
 }
 
 void loop() {
@@ -107,22 +138,22 @@ void loop() {
 
             switch(reader){
               case 0:
-                setColor(red, green, LED0red, LED0green); 
+                setColor(green, blue, LED0green, LED0blue); 
                 delay(1000);
               break;
             
               case 1:
-                setColor(red, green, LED1red, LED1green); 
+                setColor(green, blue, LED1green, LED1blue); 
                 delay(1000);
               break;
               
               case 2:
-                setColor(red, green, LED2red, LED2green); 
+                setColor(green, blue, LED2green, LED2blue); 
                 delay(1000);
               break;
               
               case 3:
-                setColor(red, green, LED3red, LED3green); 
+                setColor(green, blue, LED3green, LED3blue); 
                 delay(1000);
               break;
               
@@ -157,13 +188,13 @@ void dump_byte_array(byte * buffer, byte bufferSize) {
   }
 }
 
-void setColor(int redValue, int greenValue, int LEDred, int LEDgreen) {
-  analogWrite(LEDred, redValue);
+void setColor(int greenValue, int blueValue, int LEDgreen, int LEDblue) {
   analogWrite(LEDgreen, greenValue);
+  analogWrite(LEDblue, blueValue);
 }
 void stopp(){
-  setColor(0, 0, LED0red, LED0green); 
-  setColor(0, 0, LED1red, LED1green); 
-  setColor(0, 0, LED2red, LED2green); 
-  setColor(0, 0, LED3red, LED3green);            
+  setColor(0, 0, LED0green, LED0blue); 
+  setColor(0, 0, LED1green, LED1blue); 
+  setColor(0, 0, LED2green, LED2blue); 
+  setColor(0, 0, LED3green, LED3blue);            
 }
