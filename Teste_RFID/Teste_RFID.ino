@@ -2,9 +2,9 @@
    --------------------------------------------------------------------------------------------------------------------
    @Autecla: RFID Matrix
    Sketch/program to read data from more than one sensor and send the TAG number to Control Module by serial
-   
+
    --------------------------------------------------------------------------------------------------------------------
-****************************************************************************************************************************/   
+****************************************************************************************************************************/
 
 /*
    This is based on MFRC522 library example; for further details and other examples see: https://github.com/miguelbalboa/rfid
@@ -23,11 +23,11 @@
    RST/Reset   RST          9             5         D9         RESET/ICSP-5     RST
 
    SPI SS 1    SDA(SS)      ** custom, take a unused pin, only HIGH/LOW required *
-   
+
    SPI SS 2    SDA(SS)      ** custom, take a unused pin, only HIGH/LOW required *
-   
+
    SPI SS 3    SDA(SS)      ** custom, take a unused pin, only HIGH/LOW required *
-   
+
    SPI SS 4    SDA(SS)      ** custom, take a unused pin, only HIGH/LOW required *
 
    SPI MOSI    MOSI         11 / ICSP-4   51        D11        ICSP-4           16
@@ -91,41 +91,41 @@ void setup() {
 }
 
 void loop() {
-  
+
   for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
 
           // Looking for new cards
-      
+
           if (mfrc522[reader].PICC_IsNewCardPresent() && mfrc522[reader].PICC_ReadCardSerial()) {
             Serial.print(F("M1"));
             Serial.print(F("P"));
             Serial.println(reader);
-      
+
             // Show some details of the PICC (that is: the tag/card)
 
             Serial.print(F("UID: "));
             dump_byte_array(mfrc522[reader].uid.uidByte, mfrc522[reader].uid.size);
             Serial.println();
-      
-      
-           
+
+
+
             /*Serial.print(F("PICC type: "));
-      
+
               MFRC522::PICC_Type piccType = mfrc522[reader].PICC_GetType(mfrc522[reader].uid.sak);
-      
+
               Serial.println(mfrc522[reader].PICC_GetTypeName(piccType));*/
-      
+
             // Halt PICC
       
             mfrc522[reader].PICC_HaltA();
-      
-            // Stop encryption on PCD
-      
-            mfrc522[reader].PCD_StopCrypto1();
-      
-          } //if (mfrc522[reader].PICC_IsNewC..
 
-  } //for(uint8_t reader..
+            // Stop encryption on PCD
+
+            mfrc522[reader].PCD_StopCrypto1();
+
+          }
+
+  }
 }
 
 /**
@@ -140,5 +140,3 @@ void dump_byte_array(byte * buffer, byte bufferSize) {
     Serial.print(buffer[i], HEX);
   }
 }
-
-
