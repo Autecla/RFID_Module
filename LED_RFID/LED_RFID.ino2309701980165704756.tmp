@@ -127,7 +127,10 @@ void loop() {
               break;
               
               default:
-              stopp();
+              setColor(0, 0, LED0red, LED0green); 
+              setColor(0, 0, LED1red, LED1green); 
+              setColor(0, 0, LED2red, LED2green); 
+              setColor(0, 0, LED3red, LED3green); 
               break;
             }
            
@@ -140,6 +143,17 @@ void loop() {
             mfrc522[reader].PCD_StopCrypto1();
       
           } 
+
+          int endd;
+          endd = Serial.read();
+          Serial.println(endd, DEC);
+          delay(1000);
+          if(endd == 4){
+              setColor(0, 0, LED0red, LED0green); 
+              setColor(0, 0, LED1red, LED1green); 
+              setColor(0, 0, LED2red, LED2green); 
+              setColor(0, 0, LED3red, LED3green); 
+          }
 
   } 
 }
@@ -160,10 +174,4 @@ void dump_byte_array(byte * buffer, byte bufferSize) {
 void setColor(int redValue, int greenValue, int LEDred, int LEDgreen) {
   analogWrite(LEDred, redValue);
   analogWrite(LEDgreen, greenValue);
-}
-void stopp(){
-  setColor(0, 0, LED0red, LED0green); 
-  setColor(0, 0, LED1red, LED1green); 
-  setColor(0, 0, LED2red, LED2green); 
-  setColor(0, 0, LED3red, LED3green);            
 }
