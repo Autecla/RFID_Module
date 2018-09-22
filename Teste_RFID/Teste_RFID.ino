@@ -2,7 +2,6 @@
    --------------------------------------------------------------------------------------------------------------------
    @Autecla: RFID Matrix
    Sketch/program to read data from more than one sensor and send the TAG number to Control Module by serial
-
    --------------------------------------------------------------------------------------------------------------------
 ****************************************************************************************************************************/
 
@@ -116,7 +115,7 @@ void loop() {
               Serial.println(mfrc522[reader].PICC_GetTypeName(piccType));*/
 
             // Halt PICC
-      
+
             mfrc522[reader].PICC_HaltA();
 
             // Stop encryption on PCD
