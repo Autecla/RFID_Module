@@ -83,7 +83,7 @@ void setup() {
     Serial.print(F(": "));
     mfrc522[reader].PCD_DumpVersionToSerial();
 
-    //mfrc522[reader].PCD_SetAntennaGain(mfrc522[reader].RxGain_max);
+
     delay(100);
 
   }
