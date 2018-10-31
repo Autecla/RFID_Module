@@ -2,9 +2,9 @@
    --------------------------------------------------------------------------------------------------------------------
    @Autecla: RFID Matrix
    Sketch/program to read data from more than one sensor and send the TAG number to Control Module by serial
-   
+
    --------------------------------------------------------------------------------------------------------------------
-****************************************************************************************************************************/   
+****************************************************************************************************************************/
 
 #include <SPI.h>
 #include <MFRC522.h>
@@ -30,7 +30,7 @@ byte v;
 MFRC522 mfrc522[NR_OF_READERS];
 
 
-//LEDs Pin Numbers 
+//LEDs Pin Numbers
 
 int LED0green= 3;
 int LED0blue = 2;
@@ -67,7 +67,7 @@ void setup() {
   pinMode(LED3green, OUTPUT);
   pinMode(LED3blue, OUTPUT);
 
-  
+
   while (!Serial);              // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
 
   SPI.begin();                  // Init SPI bus
@@ -87,25 +87,25 @@ void setup() {
     if ((v == 0x80)|| (v == 0x81)|| (v == 0x82) || (v == 0x88) || (v == 0x90)|| (v == 0x91)|| (v == 0x92)){
       switch(reader){
               case 0:
-                setColor(green, blue, LED0green, LED0blue); 
+                setColor(green, blue, LED0green, LED0blue);
                 delay(500);
               break;
-            
+
               case 1:
-                setColor(green, blue, LED1green, LED1blue); 
+                setColor(green, blue, LED1green, LED1blue);
                 delay(500);
               break;
-              
+
               case 2:
-                setColor(green, blue, LED2green, LED2blue); 
+                setColor(green, blue, LED2green, LED2blue);
                 delay(500);
               break;
-              
+
               case 3:
-                setColor(green, blue, LED3green, LED3blue); 
+                setColor(green, blue, LED3green, LED3blue);
                 delay(500);
               break;
-              
+
               default:
               stopp();
               break;
@@ -119,60 +119,60 @@ void setup() {
 }
 
 void loop() {
-  
+
   for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
 
           // Looking for new cards
-      
+
           if (mfrc522[reader].PICC_IsNewCardPresent() && mfrc522[reader].PICC_ReadCardSerial()) {
-            
+
             Serial.print(F("M1"));
             Serial.print(F("P"));
-            Serial.println(reader);
-      
+            Serial.print(reader);
+
             // Show some details of the PICC (that is: the tag/card)
 
-            Serial.print(F("UID: "));
+          //  Serial.print(F("UID: "));
             dump_byte_array(mfrc522[reader].uid.uidByte, mfrc522[reader].uid.size);
-            Serial.println();
+          //  Serial.println();
 
             switch(reader){
               case 0:
-                setColor(green, blue, LED0green, LED0blue); 
+                setColor(green, blue, LED0green, LED0blue);
                 delay(1000);
               break;
-            
+
               case 1:
-                setColor(green, blue, LED1green, LED1blue); 
+                setColor(green, blue, LED1green, LED1blue);
                 delay(1000);
               break;
-              
+
               case 2:
-                setColor(green, blue, LED2green, LED2blue); 
+                setColor(green, blue, LED2green, LED2blue);
                 delay(1000);
               break;
-              
+
               case 3:
-                setColor(green, blue, LED3green, LED3blue); 
+                setColor(green, blue, LED3green, LED3blue);
                 delay(1000);
               break;
-              
+
               default:
               stopp();
               break;
             }
-           
-            // Halt PICC
-      
-            mfrc522[reader].PICC_HaltA();
-      
-            // Stop encryption on PCD
-      
-            mfrc522[reader].PCD_StopCrypto1();
-      
-          } 
 
-  } 
+            // Halt PICC
+
+            mfrc522[reader].PICC_HaltA();
+
+            // Stop encryption on PCD
+
+            mfrc522[reader].PCD_StopCrypto1();
+
+          }
+
+  }
 }
 
 /**
@@ -183,7 +183,7 @@ void loop() {
 
 void dump_byte_array(byte * buffer, byte bufferSize) {
   for (byte i = 0; i < bufferSize; i++) {
-    Serial.print(buffer[i] < 0x10 ? " 0" : " ");
+    Serial.print(buffer[i] < 0x10 ? "0" : "");
     Serial.print(buffer[i], HEX);
   }
 }
@@ -193,8 +193,8 @@ void setColor(int greenValue, int blueValue, int LEDgreen, int LEDblue) {
   analogWrite(LEDblue, blueValue);
 }
 void stopp(){
-  setColor(0, 0, LED0green, LED0blue); 
-  setColor(0, 0, LED1green, LED1blue); 
-  setColor(0, 0, LED2green, LED2blue); 
-  setColor(0, 0, LED3green, LED3blue);            
+  setColor(0, 0, LED0green, LED0blue);
+  setColor(0, 0, LED1green, LED1blue);
+  setColor(0, 0, LED2green, LED2blue);
+  setColor(0, 0, LED3green, LED3blue);
 }
